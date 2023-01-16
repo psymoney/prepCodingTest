@@ -15,3 +15,4 @@ for _ in range(cases):
 
     print(profits)
   
+# 반대로 생각하자. 정방향으로 안되는거 계속 붙잡지 말고
