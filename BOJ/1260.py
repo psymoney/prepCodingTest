@@ -2,6 +2,8 @@ import sys
 
 input = sys.stdin.readline
 
+dfs_str = ''
+bfs_str = ''
 
 class Node:
   def __init__(self, v):
@@ -10,7 +12,6 @@ class Node:
     self.adjacent = []
 
   def visit(self):
-    print(self.v, end=' ')
     self.visited = True
 
 
@@ -18,6 +19,7 @@ def dfs(root):
   if root is None:
     return
   root.visit()
+  dfs_str += root.v + ' '
 
   for node in root.adjacent:
     if not node.visited:
@@ -27,14 +29,16 @@ def dfs(root):
 def bfs(root):
   q = []
   root.visit()
-  q.append(root.adjacent[i]) for i in range(len(root.adjacent))
+  bfs_str += root.v + ' '
+  for i in root.adjacent:
+    q.append(i) 
   idx = 0
   
   while len(q) > idx:
-    q[idx].visit()
+    bfs_str += q[idx].v + ' '
     for node in q[idx].adjacent:
       if not node.visited:
-        node.visit()
+        node.visited = True
         q.append(node)
     
     idx += 1
@@ -44,8 +48,13 @@ n, m, v = list(map(int, input().split(' ')))
 
 nodes = [Node(i) for i in range(n + 1)]
 
+
 for i in range(m):
   i, j = list(map(int, input().split(' ')))
   nodes[i].adjacent.append(nodes[j])
 
-search(nodes[v])
+dfs(nodes[v])
+bfs(nodes[v])
+
+print(dfs_str)
+print(bfs_str)
