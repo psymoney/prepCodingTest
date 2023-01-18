@@ -1,9 +1,11 @@
 import sys
+import queue
 
 input = sys.stdin.readline
 
 dfs_values = []
 bfs_values = []
+
 
 class Node:
     def __init__(self, v):
@@ -15,48 +17,56 @@ class Node:
         self.visited = True
 
 
-# different result compared with example
 def dfs(root):
     if root is None:
         return
     root.visit()
     dfs_values.append(root.v)
+    root.adjacent.sort(key=lambda x: x.v)
 
     for node in root.adjacent:
         if not node.visited:
             dfs(node)
 
-# not even traverse all adjacent
+
 def bfs(root):
-    q = []
+    q = queue.Queue()
     root.visit()
     bfs_values.append(root.v)
+    root.adjacent.sort(key=lambda x: x.v)
     for i in root.adjacent:
-        q.append(i) 
-    idx = 0
-  
-    while len(q) > idx:
-        bfs_values.append(q[idx].v)
-        for node in q[idx].adjacent:
+        bfs_values.append(i.v)
+        i.visit()
+        q.put(i)
+
+    while not q.empty():
+        a = q.get()
+
+        a.adjacent.sort(key=lambda x: x.v)
+        for node in a.adjacent:
+
             if not node.visited:
-                node.visited = True
-                q.append(node)
-    
-        idx += 1
+                node.visit()
+                bfs_values.append(node.v)
+                q.put(node)
+
 
 
 n, m, v = list(map(int, input().split(' ')))
 
-nodes = [Node(i) for i in range(n + 1)]
-
-
+dnodes = [Node(i) for i in range(n + 1)]
+bnodes = [Node(i) for i in range(n + 1)]
 for i in range(m):
     i, j = list(map(int, input().split(' ')))
-    nodes[i].adjacent.append(nodes[j])
-    # one way adjacent
+    dnodes[i].adjacent.append(dnodes[j])
+    dnodes[j].adjacent.append(dnodes[i])
 
-dfs(nodes[v])
-bfs(nodes[v])
+    bnodes[i].adjacent.append(bnodes[j])
+    bnodes[j].adjacent.append(bnodes[i])
+
+
+dfs(dnodes[v])
+bfs(bnodes[v])
 
 result = str(dfs_values[0])
 for i in dfs_values[1:]:
