@@ -1,41 +1,18 @@
 import sys
+input = sys.stdin.readline
+n = input().replace('\n', "")
+l = len(n)
+dp = [0] * (l + 1)
+if int(n[0]) == 0:
+    print(0)
+else:
+    dp[0], dp[1] = 1, 1
+    n = "0" + n
 
-
-def sol():
-    input = sys.stdin.readline
-    num = input().replace("\n", "")
-
-    sections = []
-    for i in range(len(num)):
-        if i == 0:
-            if num[i] == 0:
-                return 0
-            sections.append(1)
-            continue
-        if int(num[i]) == 0:
-            sections[-1] -= 1
-            continue
-        if int(num[i - 1]) == 0:
-            sections.append(1)
-            continue
-
-        concat_num = int(num[i-1] + num[i])
-        if 1 <= concat_num <= 26:
-            sections[-1] += 1
-        else:
-            sections.append(1)
-
-    N = max(sections)
-
-    dp = [0, 1, 2]
-    ans = 1
-    while len(dp) - 1 < N:
-        dp.append((dp[-1] + dp[-2]) % 1000000)
-
-    for s in sections:
-        if s == 0:
-            continue
-        ans *= dp[s]
-    return ans
-
-print(sol())
+    for i in range(2, l + 1):
+        num = int(n[i-1] + n[i])
+        if int(n[i]) > 0:
+            dp[i] += dp[i-1]
+        if 10 <= num <= 26:
+            dp[i] += dp[i-2]
+    print(dp[l] % 1000000)
