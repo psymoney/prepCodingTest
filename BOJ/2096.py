@@ -2,23 +2,30 @@ import sys
 input = sys.stdin.readline
 
 N = int(input())
-max_dp = [[0] * 3 for _ in range(N)]
-min_dp = [[0] * 3 for _ in range(N)]
-for i in range(N):
-    nums = input()
-    max_dp[i] = list(map(int, nums.split()))
-    min_dp[i] = list(map(int, nums.split()))
+nums = [list(map(int, input().split())) for _ in range(N)]
+max_dp = [0] * 3
+min_dp = [0] * 3
+
+for i in range(3):
+    max_dp[i] = nums[0][i]
+    min_dp[i] = nums[0][i]
 
 for i in range(1, N):
+    max_temp = [0] * 3
+    min_temp = [0] * 3
     for j in range(3):
+        max_temp[j] = nums[i][j]
+        min_temp[j] = nums[i][j]
         if j == 0:
-            max_dp[i][j] += max(max_dp[i-1][j], max_dp[i-1][j+1])
-            min_dp[i][j] += min(min_dp[i-1][j], min_dp[i-1][j+1])
+            max_temp[j] += max(max_dp[j], max_dp[j+1])
+            min_temp[j] += min(min_dp[j], min_dp[j+1])
         elif j == 1:
-            max_dp[i][j] += max(max_dp[i-1])
-            min_dp[i][j] += min(min_dp[i-1])
+            max_temp[j] += max(max_dp)
+            min_temp[j] += min(min_dp)
         else:
-            max_dp[i][j] += max(max_dp[i - 1][j], max_dp[i - 1][j - 1])
-            min_dp[i][j] += min(min_dp[i - 1][j], min_dp[i - 1][j - 1])
+            max_temp[j] += max(max_dp[j], max_dp[j-1])
+            min_temp[j] += min(min_dp[j], min_dp[j-1])
+    max_dp = max_temp
+    min_dp = min_temp
 
-print(f'{max(max_dp[-1])} {min(min_dp[-1])}')
+print(f'{max(max_dp)} {min(min_dp)}')
