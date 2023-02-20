@@ -2,13 +2,12 @@ import sys
 input = sys.stdin.readline
 
 N = int(input())
-G = {}
-for i in range(1, N + 1):
-    G.setdefault(i, [])
-n = int(input())
-for _ in range(n):
+V = int(input())
+G = [[] for _ in range(N + 1)]
+for _ in range(V):
     i, v = map(int, input().split())
     G[i].append(v)
+    G[v].append(i)
 
 def traverse(idx, group):
     group.append(idx)
