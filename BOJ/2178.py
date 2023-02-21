@@ -1,15 +1,17 @@
+from collections import deque
 
-global N, M
 N, M = map(int, input().split())
 
-global G
 G = [list(map(int, input())) for _ in range(N)]
 
-global dx, dy
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
-def traverse(x, y):
+Q = deque()
+Q.append((0, 0))
+
+while Q:
+    x, y = Q.popleft()
     for i in range(4):
         nx = dx[i] + x
         ny = dy[i] + y
@@ -19,7 +21,6 @@ def traverse(x, y):
             continue
         if G[nx][ny] == 1 or G[nx][ny] > G[x][y] + 1:
             G[nx][ny] = G[x][y] + 1
-            traverse(nx, ny)
+            Q.append((nx, ny))
 
-traverse(0,0)
 print(G[N-1][M-1])
