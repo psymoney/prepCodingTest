@@ -1,37 +1,43 @@
 import sys
-sys.setrecursionlimit(1000 * 1000)
 
 input = sys.stdin.readline
 
 N = int(input())
-MAX_ALT = 0
-G = []
-
-for _ in range(N):
-    g = list(map(int, input().split()))
-    MAX_ALT = max(g) if max(g) > MAX_ALT else MAX_ALT
-    G.append(g)
+G = [list(map(int, input().split())) for _ in range(N)]
+MAX_ALT = max(map(max, G))
 
 d = [(0, -1), (0, 1), (-1, 0), (1, 0)]
 
-def dfs(x, y, visited, rain):
-    visited[y][x] = 1
+def dfs(x, y, rain):
+    G[y][x] = rain
     for dx, dy in d:
         nx = x + dx
         ny = y + dy
 
-        if 0 <= nx < N and 0 <= ny < N and G[ny][nx] > rain and visited[ny][nx] == 0:
-            dfs(nx, ny, visited, rain)
+        if 0 <= nx < N and 0 <= ny < N and G[ny][nx] > rain:
+            dfs(nx, ny, rain)
+
+def bfs(x, y, rain):
+    G[y][x] = rain
+    Q = [(x, y)]
+    while Q:
+        ox, oy = Q.pop()
+        for dx, dy in d:
+            nx = ox + dx
+            ny = oy + dy
+
+            if 0 <= nx < N and 0 <= ny < N and G[ny][nx] > rain:
+                G[ny][nx] = rain
+                Q.append((nx, ny))
 
 areas = []
-for rain in range(0, MAX_ALT + 1):
-    visited = [[0] * N for _ in range(N)]
+for rain in range(MAX_ALT, -1, -1):
     groups = 0
     for y in range(N):
         for x in range(N):
-            if G[y][x] > rain and visited[y][x] == 0:
+            if G[y][x] > rain:
                 groups += 1
-                dfs(x, y, visited, rain)
+                bfs(x, y, rain)
 
     areas.append(groups)
 
