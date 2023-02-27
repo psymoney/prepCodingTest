@@ -1,47 +1,38 @@
 import sys
+from collections import deque
 
 input = sys.stdin.readline
 M, N, H = map(int, input().split())
-G = [[list(map(int, input().split())) for _ in range(N)] for _ in range(H)]
-
-def traverse(points, G, day):
-    Q = [points]
-    D = [(0, -1, 0), (0, 1, 0), (0, 0, -1), (0, 0, 1), (1, 0, 0), (-1, 0, 0)]
-    while Q:
-        h, n, m = Q.pop()
-        for dh, dn, dm in D:
-            nh = h + dh
-            nn = n + dn
-            nm = m + dm
-            if 0 <= nh < H and 0 <= nn < N and 0 <= nm < M:
-                if G[nh][nn][nm] == day:
-                    Q.append((nh, nn, nm))
-                    G[nh][nn][nm] = -1  # change riped tomato's status
-                if G[nh][nn][nm] == 0:
-                    G[nh][nn][nm] = day + 1  # change next tomato's status
-
-def iterate(G, day):
-    cnt = 0
-    for h in range(len(G)):
-        for n in range(len(G[0])):
-            for m in range(len(G[0][0])):
-                if G[h][n][m] == day:
-                    cnt += 1
-                    traverse((h, n, m), G, day)
-    return cnt
-
-day = -1
-
-while True:
-    cnt = iterate(G, day + 2)
-    if cnt == 0:
-        break
-    day += 1
+Q = deque()
+G = []
+D = [(0, -1, 0), (0, 1, 0), (0, 0, -1), (0, 0, 1), (1, 0, 0), (-1, 0, 0)]
 
 for h in range(H):
+    temp = []
     for n in range(N):
+        temp.append(list(map(int, input().split())))
         for m in range(M):
-            if G[h][n][m] == 0:
-                day = -1
+            if temp[n][m] == 1:
+                Q.append((h, n, m))
+    G.append(temp)
 
-print(day)
+while Q:
+    h, n, m = Q.popleft()
+    for dh, dn, dm in D:
+        nh = h + dh
+        nn = n + dn
+        nm = m + dm
+        if 0 <= nh < H and 0 <= nn < N and 0 <= nm < M and G[nh][nn][nm] == 0:
+            Q.append((nh, nn, nm))
+            G[nh][nn][nm] = G[h][n][m] + 1
+
+day = 0
+for h in G:
+    for n in h:
+        for m in n:
+            if m == 0:
+                print(-1)
+                exit(0)
+        day = max(day, max(n))
+
+print(day - 1)
