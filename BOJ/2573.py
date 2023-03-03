@@ -5,13 +5,37 @@ input = sys.stdin.readline
 N, M = map(int, input().split())
 G = [list(map(int, input().split())) for _ in range(N)]
 D = [(0, -1), (-1, 0), (0, 1), (1, 0)]
+glacial = deque
 
-# second approach: decrease glacial while traversing graph, and then check the glacial is separated
+for y in range(1, N - 1):
+    for x in range(1, M - 1):
+        if G[y][x] > 0:
+            glacial.append((x, y))
+
 year = 1
-while True:
-    # check the glacial is scattered
-    V = [[0] * M for _ in range(N)]
-    bunches = 0
+bunches = 0
+V = [[0] * M for _ in range(N)]
+while glacial:
+    x, y = glacial.popleft()
+    if V[y][x] != 0 or G[y][x] == 0:
+        continue
+
+    seas = 0
+    Q = deque()
+    for dx, dy in D:
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < M and 0 <= ny < N:
+            if G[ny][nx] == 0:
+                seas += 1
+            else:
+                Q.append((nx, ny))
+    V[y][x] = seas
+
+
+
+
+
+
     for y in range(1, N - 1):
         for x in range(1, M - 1):
             if G[y][x] == 0:
