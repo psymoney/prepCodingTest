@@ -4,19 +4,13 @@ input = sys.stdin.readline
 
 N = int(input())
 classes = sorted([tuple(map(int, input().split())) for _ in range(N)], key=lambda x: x[0])
-classrooms = []
+classrooms = [classes[0][1]]
 heapify(classrooms)
-earliest = classes[0][1]
 
 for s, t in classes[1:]:
-    if s < earliest:
-        if t <= earliest:
-            heappush(classrooms, earliest)
-            earliest = t
-        else:
-            heappush(classrooms, t)
-    else:
+    if s < classrooms[0]:
         heappush(classrooms, t)
-        earliest = heappop(classrooms)
+    else:
+        heapreplace(classrooms, t)
 
-print(len(classrooms) + 1)
+print(len(classrooms))
