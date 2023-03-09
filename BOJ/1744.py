@@ -23,14 +23,10 @@ while len(MQ) > 1:
     a, b = heappop(MQ), heappop(MQ)
     max_sum += max(a * b, a + b)
 
-if len(PQ) == 1:
-    pq = heappop(PQ) * (-1)
-    if len(MQ) == 1:
-        mq = heappop(MQ)
-        pq = max(pq * mq, pq + mq)
-    max_sum += pq
-else:
-    if len(MQ) == 1:
-        max_sum += heappop(MQ)
+for pq in PQ:
+    max_sum -= pq
+for mq in MQ:
+    max_sum += mq
+
 print(max_sum)
 
