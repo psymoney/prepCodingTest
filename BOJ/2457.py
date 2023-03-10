@@ -37,7 +37,7 @@ while i < N:
     if DEBUG:
         print(f'i = {i}')
     m = 0
-    if F[i][0] <= PERIOD[0]:
+    if F[i][0] <= PERIOD[0] < F[i][1]:
         max_fall_day = F[i][1]
         m = i
         for j in range(i+1, N):
@@ -49,12 +49,10 @@ while i < N:
         PERIOD[0] = max_fall_day
         cnt += 1
 
-        if max_fall_day <= PERIOD[0]:
-            cnt = 0
-            break
-
         if DEBUG:
             print(f'selected this index = {m}')
+    elif F[i][1] <= PERIOD[0]:
+        i += 1
     else:
         cnt = 0
         break
