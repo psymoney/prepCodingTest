@@ -32,19 +32,18 @@ if DEBUG:
 
 cnt = 0
 i = 0
-
 while i < N:
     if DEBUG:
         print(f'i = {i}')
-    m = 0
+    m = i
     if F[i][0] <= PERIOD[0] < F[i][1]:
         max_fall_day = F[i][1]
-        m = i
         for j in range(i+1, N):
-            if F[j][0] <= PERIOD[0] and F[j][1] > max_fall_day:
-                max_fall_day = F[j][1]
+            if F[j][0] <= PERIOD[0]:
+                if F[j][1] > max_fall_day:
+                    max_fall_day = F[j][1]
                 m = j
-            if F[j][0] > PERIOD[0]:
+            else:
                 break
         PERIOD[0] = max_fall_day
         cnt += 1
