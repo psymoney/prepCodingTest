@@ -16,7 +16,7 @@ DAYS = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 MONTH_IN_DAYS = [0] * 13
 for i in range(1, 13):
     MONTH_IN_DAYS[i] = MONTH_IN_DAYS[i-1] + DAYS[i-1]
-PERIOD = [MONTH_IN_DAYS[3], MONTH_IN_DAYS[11] + DAYS[11]]
+PERIOD = [MONTH_IN_DAYS[3] + 1, MONTH_IN_DAYS[11] + DAYS[11]]
 
 if DEBUG:
     print(PERIOD)
