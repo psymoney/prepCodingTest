@@ -10,16 +10,11 @@
 import sys
 input = sys.stdin.readline
 
-DEBUG = False
-
 DAYS = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 MONTH_IN_DAYS = [0] * 13
 for i in range(1, 13):
     MONTH_IN_DAYS[i] = MONTH_IN_DAYS[i-1] + DAYS[i-1]
 PERIOD = [MONTH_IN_DAYS[3] + 1, MONTH_IN_DAYS[11] + DAYS[11]]
-
-if DEBUG:
-    print(PERIOD)
 
 N = int(input())
 F = [[] for _ in range(N)]
@@ -27,14 +22,10 @@ for i in range(N):
     period = list(map(int, input().split()))
     F[i] = [MONTH_IN_DAYS[period[0]] + period[1], MONTH_IN_DAYS[period[2]] + period[3]]
 F.sort(key=lambda x: x[0])
-if DEBUG:
-    print(F)
 
 cnt = 0
 i = 0
 while i < N:
-    if DEBUG:
-        print(f'i = {i}')
     m = i
     if F[i][0] <= PERIOD[0] < F[i][1]:
         max_fall_day = F[i][1]
@@ -47,9 +38,6 @@ while i < N:
                 break
         PERIOD[0] = max_fall_day
         cnt += 1
-
-        if DEBUG:
-            print(f'selected this index = {m}')
     elif F[i][1] <= PERIOD[0]:
         i += 1
     else:
