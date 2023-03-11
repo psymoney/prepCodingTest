@@ -58,5 +58,6 @@ while i < N:
     if F[m][1] > PERIOD[1]:
         break
     i = m + 1
-
+if PERIOD[0] <= PERIOD[1]:
+    cnt = 0
 print(cnt)
