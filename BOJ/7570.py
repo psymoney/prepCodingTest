@@ -6,7 +6,7 @@ for i in range(1, N + 1):
     tags_in_position[tags_in_line[i]] = i
 
 aligned_children = 1
-maximum_aligned = 0
+maximum_aligned = 1
 
 for i in range(1, N):
     if tags_in_position[i] < tags_in_position[i+1]:
