@@ -8,8 +8,9 @@ cur_partial_length = 0
 for number in numbers:
     if records[number] == K:
         max_partial_length = max(max_partial_length, cur_partial_length)
-        cur_partial_length = 1
+        cur_partial_length = 0
         records = [0] * (100001)
     records[number] += 1
     cur_partial_length += 1
+max_partial_length = max(max_partial_length, cur_partial_length)
 print(max_partial_length)
