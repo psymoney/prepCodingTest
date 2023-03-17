@@ -1,41 +1,60 @@
 import sys
+import math
+from collections import deque
 
 def get_answer(N):
-    dp = [0] * (N + 1)
+    Q = deque()
+    Q.append([1, 0])
+    dp = [math.inf] * (N + 1)
+    H = [0] * (N + 1)
 
-    for i in range(1, N+1):
-        if i != 1:
-            dp[i] = min(dp[i], dp[i-1] + 1) if dp[i] != 0 else dp[i-1] + 1
-        if i * 3 <= N:
-            dp[i*3] = min(dp[i*3], dp[i] + 1) if dp[i*3] != 0 else dp[i] + 1
-        if i * 2 <= N:
-            dp[i*2] = min(dp[i*2], dp[i] + 1) if dp[i*2] != 0 else dp[i] + 1
+    min_depth = 0
+    trace = str(N)
+    while Q:
+        idx, cnt = Q.popleft()
+        if idx == N:
+            min_depth = cnt
+            break
 
-    answer = str(dp[-1]) + "\n" + str(N)
-    target = dp[-1] - 1
+        if idx * 3 <= N and cnt + 1 < dp[idx * 3]:
+            Q.append([idx * 3, cnt + 1])
+            dp[idx * 3] = cnt + 1
+            H[idx * 3] = idx
+        if idx * 2 <= N and cnt + 1 < dp[idx * 2]:
+            Q.append([idx * 2, cnt + 1])
+            dp[idx * 2] = cnt + 1
+            H[idx * 2] = idx
+        if idx + 1 <= N and cnt + 1 < dp[idx + 1]:
+            Q.append([idx + 1, cnt + 1])
+            dp[idx + 1] = cnt + 1
+            H[idx + 1] = idx
+    i = N
+    while i > 1:
+        trace += f' {H[i]}'
+        i = H[i]
 
-    for i in range(N-1, 0, -1):
-        if dp[i] == target:
-            answer += f' {i}'
-            target -= 1
-
-    return answer
-
+    return [min_depth, trace]
 
 def sol():
     input = sys.stdin.readline
     N = int(input())
-    print(get_answer(N))
+    answers = get_answer(N)
+    print(answers[0])
+    print(answers[1])
 
 def test():
     TEST_CASES = [
         [2, 1, "2 1"],
-        [10, 3, "10 9 3 1"]
+        [10, 3, "10 9 3 1"],
+        [642, 10, "642 214 107 106 53 52 26 13 12 4 2 1"]
     ]
 
     for (i, case) in enumerate(TEST_CASES):
-        answer = get_answer(case[0])
-        if answer != case[1]:
-            print(f'test case #{i+1} has been failed! {case[1]} is expected, but {answer} is given')
+        answers = get_answer(case[0])
+        if answers[0] != case[1] and answers[1] != case[2]:
+            print(f'test case #{i+1} has been failed!'
+                  f'answers[0] is expected to be {case[1]}, but {answers[0]} is given'
+                  f'answers[1] is expected to be \n{case[2]}\n, but the given is \n{answers[1]}')
 
+test()
 sol()
