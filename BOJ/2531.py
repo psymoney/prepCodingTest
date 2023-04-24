@@ -15,7 +15,7 @@ def sol() -> None:
     input = sys.stdin.readline
     N, d, k, c = map(int, input().split())
     A = [int(input()) for _ in range(N)]
-    print(answer())
+    print(answer(A, k, c))
 
 sol()
 
