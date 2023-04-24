@@ -1,14 +1,23 @@
 import sys
+from collections import defaultdict
 
 
 def answer(A: list, k: int, c: int) -> int:
-    max_kinds = 0
+    streak = defaultdict(int)
+
+    for i in range(k):
+        streak[A[i]] += 1
+    streak[c] += 1
+    kinds = 0
     for i in range(len(A)):
-        kinds = set([c])
-        for j in range(k):
-            kinds.add(A[(i + j) % len(A)])
-        max_kinds = max(max_kinds, len(kinds))
-    return max_kinds
+        kinds = max(kinds, len(streak))
+
+        streak[A[i]] -= 1
+        if streak[A[i]] == 0:
+            del streak[A[i]]
+        streak[A[(i + k) % len(A)]] += 1
+
+    return kinds
 
 
 def sol() -> None:
