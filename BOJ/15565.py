@@ -2,21 +2,20 @@ import sys
 from math import inf
 
 def answer(arr: list, k: int) -> int:
-    l, r = 0, 0
+    l = 0
     cnt = 0
     min_len = inf
-    while r < len(arr):
+    for r in range(len(arr)):
         if arr[r] == 1:
             cnt += 1
+            if cnt == 1:
+                l = r
         if cnt == k:
             min_len = min(min_len, r - l + 1)
             l += 1
             cnt -= 1
             while arr[l] != 1:
                 l += 1
-        if r == len(arr) - 1:
-            break
-        r += 1
 
     return min_len if min_len != inf else -1
 
@@ -31,7 +30,7 @@ def sol() -> None:
 def test() -> None:
     cases = [
         [[1, 2, 2, 2, 1, 2, 1, 2, 2, 1], 3, 6],
-        [[1, 2, 2, 2, 1, 1, 1, 2, 2, 1], 3, 3],
+        [[2, 2, 2, 2, 1, 1, 1, 2, 2, 1], 3, 3],
         [[1, 2, 2, 2, 2, 2, 2, 2, 2, 1], 2, 10],
         [[2, 2, 2, 2], 2, -1],
         [[1, 1], 2, 2]
