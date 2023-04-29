@@ -1,23 +1,23 @@
 import sys
 
 def answer(L, S):
-    partial_sum = [0] * len(L)
+    l, r = 0, 0
     sum = 0
+    length = int(1e9)
 
-    for i in range(len(L)):
-        if L[i] >= S:
-            return 1
-        sum += L[i]
-        partial_sum[i] = sum
+    while True:
+        if sum >= S:
+            length = min(length, r - l)
+            sum -= L[l]
+            l += 1
+        elif r == len(L):
+            break
+        else:
+            sum += L[r]
+            r += 1
 
-    l = 2
-
-    while l < len(L):
-        for i in range(len(L) - l):
-            if partial_sum[i + l] - partial_sum[i] >= S:
-                return l
-        l += 1
-
+    if length != int(1e9):
+        return length
     return 0
 
 
