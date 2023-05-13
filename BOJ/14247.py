@@ -6,7 +6,7 @@ def answer(h, a):
 
     for i in range(n-1, -1, -1):
         e = sa[i]
-        h[a.index(e)] += e * i
+        h[i] += e * i
 
     return sum(h)
 
@@ -19,7 +19,7 @@ def solve():
     a = list(map(int, input().split()))
     print(answer(h, a))
 
-solve()
+# solve()
 
 def test():
     CASES = [
