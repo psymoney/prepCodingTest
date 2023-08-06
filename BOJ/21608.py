@@ -23,6 +23,7 @@ class SharkSchool:
     def solve(self):
         self.initiate_properties()
         self.allocates()
+        print(self.table)
         print(self.total_satisfaction)
 
     # O(N^4)
@@ -60,14 +61,18 @@ class SharkSchool:
                 # calculate adjacent empty and interested table numbers
                 empty_tables, interested_tables = self.get_empty_and_interested_adjacent_tables(row, col, stu)
 
+                # first order condition
                 if interested_tables > temp[0]:
                     temp = (interested_tables, empty_tables, row, col)
+                # second order condition
                 elif interested_tables == temp[0]:
                     if empty_tables > temp[1]:
                         temp = (interested_tables, empty_tables, row, col)
+                    # third order condition
                     elif empty_tables == temp[1]:
                         if row < temp[2]:
                             temp = (interested_tables, empty_tables, row, col)
+                        # forth order condition
                         elif row == temp[2] and col < temp[3]:
                             temp = (interested_tables, empty_tables, row, col)
 
