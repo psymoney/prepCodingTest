@@ -53,9 +53,11 @@ class SharkSchool:
 
         for row in range(self.N):
             for col in range(self.N):
+                # if current table is not empty, go to next seat
                 if self.table[row][col] != 0:
                     continue
 
+                # calculate adjacent empty and interested table numbers
                 empty_tables, interested_tables = self.get_empty_and_interested_adjacent_tables(row, col, stu)
 
                 if interested_tables > temp[0]:
