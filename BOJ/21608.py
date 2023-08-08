@@ -47,7 +47,7 @@ class SharkSchool:
 
     # O(N^2)
     def allocate_student_at_table(self, stu: list) -> None:
-        temp = (0, 0, 0, 0)  # respectively interested seats, empty seats, row, and column
+        temp = (-1, 0, 0, 0)  # respectively interested seats, empty seats, row, and column
 
         for row in range(self.N):
             for col in range(self.N):
