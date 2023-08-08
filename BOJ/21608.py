@@ -58,20 +58,8 @@ class SharkSchool:
                 # calculate adjacent empty and interested table numbers
                 empty_seats, interested_seats = self.get_empty_and_interested_adjacent_seats(row, col, stu)
 
-                # first order condition
-                if interested_seats > temp[0]:
+                if (-interested_seats, -empty_seats, row, col) > (-temp[0], -temp[1], temp[2], temp[3]):
                     temp = (interested_seats, empty_seats, row, col)
-                # second order condition
-                elif interested_seats == temp[0]:
-                    if empty_seats > temp[1]:
-                        temp = (interested_seats, empty_seats, row, col)
-                    # third order condition
-                    elif empty_seats == temp[1]:
-                        if row < temp[2]:
-                            temp = (interested_seats, empty_seats, row, col)
-                        # forth order condition
-                        elif row == temp[2] and col < temp[3]:
-                            temp = (interested_seats, empty_seats, row, col)
 
         self.table[temp[2]][temp[3]] = stu[0]
 
