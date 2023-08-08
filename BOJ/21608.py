@@ -23,7 +23,6 @@ class SharkSchool:
     def solve(self):
         self.initiate_properties()
         self.allocates()
-        print(self.table)
         print(self.total_satisfaction)
 
     # O(N^4)
@@ -41,7 +40,7 @@ class SharkSchool:
             for col in range(self.N):
                 idx = self.table[row][col] - 1
 
-                empty, interested = self.get_empty_and_interested_adjacent_tables(row, col, students[idx])
+                empty, interested = self.get_empty_and_interested_adjacent_seats(row, col, students[idx])
                 satisfaction = 10 ** (interested - 1) if interested != 0 else 0
 
                 total_satisfaction += satisfaction
@@ -59,38 +58,38 @@ class SharkSchool:
                     continue
 
                 # calculate adjacent empty and interested table numbers
-                empty_tables, interested_tables = self.get_empty_and_interested_adjacent_tables(row, col, stu)
+                empty_seats, interested_seats = self.get_empty_and_interested_adjacent_seats(row, col, stu)
 
                 # first order condition
-                if interested_tables > temp[0]:
-                    temp = (interested_tables, empty_tables, row, col)
+                if interested_seats > temp[0]:
+                    temp = (interested_seats, empty_seats, row, col)
                 # second order condition
-                elif interested_tables == temp[0]:
-                    if empty_tables > temp[1]:
-                        temp = (interested_tables, empty_tables, row, col)
+                elif interested_seats == temp[0]:
+                    if empty_seats > temp[1]:
+                        temp = (interested_seats, empty_seats, row, col)
                     # third order condition
-                    elif empty_tables == temp[1]:
+                    elif empty_seats == temp[1]:
                         if row < temp[2]:
-                            temp = (interested_tables, empty_tables, row, col)
+                            temp = (interested_seats, empty_seats, row, col)
                         # forth order condition
                         elif row == temp[2] and col < temp[3]:
-                            temp = (interested_tables, empty_tables, row, col)
+                            temp = (interested_seats, empty_seats, row, col)
 
         self.table[temp[2]][temp[3]] = stu[0]
 
-    def get_empty_and_interested_adjacent_tables(self, row: int, col: int, std: list) -> tuple:
-        empty_tables, interested_tables = 0, 0
+    def get_empty_and_interested_adjacent_seats(self, row: int, col: int, std: list) -> tuple:
+        empty_seats, interested_seats = 0, 0
 
         for i in range(4):
             nr, nc = row + self.dr[i], col + self.dc[i]
 
             if 0 <= nr < self.N and 0 <= nc < self.N:
                 if self.table[nr][nc] == 0:
-                    empty_tables += 1
+                    empty_seats += 1
                 elif self.table[nr][nc] in std[1:]:
-                    interested_tables += 1
+                    interested_seats += 1
 
-        return empty_tables, interested_tables
+        return empty_seats, interested_seats
 
 
 if __name__ == '__main__':
