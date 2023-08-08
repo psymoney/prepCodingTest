@@ -5,7 +5,6 @@ class SharkSchool:
     N: int = None
     students: list = None
     table: list = None
-    satisfactions: list = None
 
     dr: list = [-1, 1, 0, 0]
     dc: list = [0, 0, -1, 1]
@@ -18,7 +17,6 @@ class SharkSchool:
         self.N = int(input())
         self.students = [list(map(int, input().split())) for _ in range(self.N ** 2)]
         self.table = [[0] * self.N for _ in range(self.N)]
-        self.satisfactions = [[0] * self.N for _ in range(self.N)]
 
     def solve(self):
         self.initiate_properties()
