@@ -8,25 +8,12 @@ import sys
 input = sys.stdin.readline
 
 N, K = map(int, input().split())
-lengths = [0] + list(map(int, input().split()))
+lengths = list(map(int, input().split()))
+courses = [i for i in range(0, N)] + [i for i in range(N - 1, -1, -1)]
 
-total_length = sum(lengths)
-course = 0
-
-if K >= total_length:
-    K -= total_length
-    course = 6
-
-    while K >= 0:
-        course -= 1
-        length = lengths[course]
-        K -= length
-else:
-    course = 0
-
-    while K >= 0:
-        course += 1
-        length = lengths[course]
-        K -= length
-
-print(course)
+for course in courses:
+    length = lengths[course]
+    K -= length
+    if K < 0:
+        print(course + 1)
+        break
