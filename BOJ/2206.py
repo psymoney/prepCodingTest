@@ -26,30 +26,43 @@ from collections import deque
 
 input = sys.stdin.readline
 
+# input lines for parameters
 N, M = map(int, input().split())
 MAP = [list(map(int, input().strip())) for _ in range(N)]
-D = [(0, -1), (0, 1), (-1, 0), (1, 0)] # up, down, left, right
+
+# initiation of required data
+visited = [[[0] * M for _ in range(N)] for _ in range(2)]
+D = [(0, -1), (0, 1), (-1, 0), (1, 0)]  # x,y set for directional movement for respectively up, down, left, and right
 ans = 10 ** 8 + 1
-T = deque([(0, 0, 0, 1)])
-MAP[0][0] = -1
+T = deque([(0, 0, 0)])  # a queue for dfs meaning respectively x, y, breached count
 
 while len(T) > 0:
-    x, y, cnt, b = T.popleft()
-    cnt += 1
+    x, y, b_cnt = T.popleft()
+    m_cnt = visited[b_cnt][y][x] + 1   # movement count
 
     if x == M - 1 and y == N - 1:
-        ans = min(cnt, ans)
+        ans = min(m_cnt, ans)
 
     for dx, dy in D:
         nx, ny = x + dx, y + dy
-        if 0 <= nx < M and 0 <= ny < N and cnt < MAP[ny][nx]:
+        if 0 <= nx < M and 0 <= ny < N:
             v = MAP[ny][nx]
             if v == 0:
-                MAP[ny][nx] = cnt
-                T.append((nx, ny, cnt, b))
-            elif v == 1 and b == 1:
-                MAP[ny][nx] = cnt
-                T.append((nx, ny, cnt, b - 1))
+                if visited[b_cnt][ny][nx] == 0:
+                    visited[b_cnt][ny][nx] = m_cnt
+                    T.append((nx, ny, b_cnt))
+                elif m_cnt < visited[b_cnt][ny][nx]:
+                    visited[b_cnt][ny][nx] = m_cnt
+                    T.append((nx, ny, b_cnt))
+            elif v == 1:
+                if b_cnt == 0:
+                    # the case breaching the wall at (x, y)
+                    if visited[b_cnt + 1][ny][nx] == 0:
+                        visited[b_cnt + 1][ny][nx] = m_cnt
+                        T.append((nx, ny, b_cnt + 1))
+                    elif m_cnt < visited[b_cnt + 1][ny][nx]:
+                        visited[b_cnt][ny][nx] = m_cnt
+                        T.append((nx, ny, b_cnt))
 
 print(ans) if ans != 10 ** 8 + 1 else print(-1)
 
