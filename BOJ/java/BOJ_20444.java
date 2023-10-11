@@ -7,8 +7,6 @@ import java.util.StringTokenizer;
 public class BOJ_20444 {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello World!");
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
