@@ -3,94 +3,126 @@ package BOJ.java;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class BOJ_1944 {
-    int n;
-    int m;
-    char[][] board;
-    int[][] dist;
-    int[] s = new int[2];
-    ArrayList<int[]> k = new ArrayList<>();
+    static int n, m;
+    static char[][] board;
+    static ArrayList<Node> nodes = new ArrayList<>();
+    static PriorityQueue<Edge> pq;
+    static int[] parents;
 
-    public BOJ_1944() throws IOException {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String[] inputs = br.readLine().split(" ");
         n = Integer.parseInt(inputs[0]);
         m = Integer.parseInt(inputs[1]);
         board = new char[n][n];
-        dist = new int[n][n];
+        pq = new PriorityQueue<>();
 
         for(int y = 0; y < n; y++) {
             char[] line = br.readLine().trim().toCharArray();
             board[y] = line;
             for(int x = 0; x < n; x++) {
-                dist[y][x] = Integer.MAX_VALUE;
-
-                if(line[x] == 'S') {
-                    s = new int[] {x, y};
-                } else if(line[x] == 'K') {
-                    k.add(new int[] {x, y});
+                if(line[x] == 'S' || line[x] == 'K') {
+                    nodes.add(new Node(x, y));
                 }
             }
         }
-        solve();
+        for(int i = 0; i < m; i++) {
+            bfs(i);
+        }
+
+        System.out.println(kruskal());
     }
 
-    private void solve() {
+    private static void bfs(int idx) {
+        int[][] dist = new int[n][n];
+        for(int i = 0; i < n; i++) Arrays.fill(dist[i], Integer.MAX_VALUE);
         int[] dx = new int[] {0, 0, -1, 1};
         int[] dy = new int[] {-1, 1, 0, 0};
 
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[] {s[0], s[1], s[0], s[1]});
-        dist[s[1]][s[0]] = 0;
+        Queue<Node> q = new LinkedList<>();
+        q.add(nodes.get(idx));
+        dist[nodes.get(idx).y][nodes.get(idx).x] = 0;
 
-        while (!q.isEmpty()) {
-            int[] axis = q.poll();
-            int x = axis[0];
-            int y = axis[1];
-            int sx = axis[2];
-            int sy = axis[3];
+        while(!q.isEmpty()) {
+            Node current = q.poll();
 
             for(int i = 0; i < 4; i++) {
-                int nx = x + dx[i];
-                int ny = y + dy[i];
+                int nx = current.x + dx[i];
+                int ny = current.y + dy[i];
 
                 if(nx < 0 || nx >= n || ny < 0 || ny >= n || board[ny][nx] == '1') continue;
-                if(ny == sy && nx == sx) continue;
-
-                if(board[y][x] == 'K' && 1 < dist[ny][nx]) {
-                    dist[ny][nx] = 1;
-                    q.add(new int[] {nx, ny, sx, sy});
-                } else if(board[y][x] != 'K' && dist[y][x] + 1 < dist[ny][nx]) {
-                    dist[ny][nx] = dist[y][x] + 1;
-                    if(board[ny][nx] == 'K') {
-                        q.add(new int[] {nx, ny, nx, ny});
-                    } else {
-                        q.add(new int[] {nx, ny, sx, sy});
+                int nd = dist[current.y][current.x] + 1;
+                if(nd >= dist[ny][nx]) continue;
+                dist[ny][nx] = nd;
+                if(board[ny][nx] == 'K' || board[ny][nx] == 'S') {
+                    for(int j = 0; j < nodes.size(); j++) {
+                        if(nodes.get(j).x == nx && nodes.get(j).y == ny) {
+                            pq.offer(new Edge(idx, j, dist[ny][nx]));
+                        }
                     }
                 }
 
+                q.offer(new Node(nx, ny));
             }
         }
-
-        System.out.println(calculateTotalDist());
     }
 
-    private int calculateTotalDist() {
-        int total = 0;
+    private static int kruskal() {
+        parents = new int[m + 1];
+        for(int i = 0; i < m + 1; i++) parents[i] = i;
+        int totalCost = 0;
+        int connections = 0;
 
-        for(int i = 0; i < m; i++) {
-            int x = k.get(i)[0];
-            int y = k.get(i)[1];
-            if(dist[y][x] == Integer.MAX_VALUE) {
-                return -1;
+        while(!pq.isEmpty()) {
+            Edge current = pq.poll();
+
+            int s = find(current.s);
+            int e = find(current.e);
+
+            if(s != e) {
+                union(s, e);
+                totalCost += current.cost;
+                connections++;
             }
-            total += dist[y][x];
+        }
+        if(connections != m) return -1;
+        return totalCost;
+    }
+
+    private static int find(int node) {
+        if(parents[node] == node) return node;
+        else return parents[node] = find(parents[node]);
+    }
+
+    private static void union(int s, int e) {
+        parents[s] = e;
+    }
+
+    static class Node {
+        int x, y;
+
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    static class Edge implements Comparable<Edge> {
+        int s, e;
+        int cost;
+
+        public Edge(int s, int e, int cost) {
+            this.s = s;
+            this.e = e;
+            this.cost = cost;
         }
 
-        return total;
+        @Override
+        public int compareTo(Edge o) {
+            return this.cost - o.cost;
+        }
     }
 }
