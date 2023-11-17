@@ -7,9 +7,7 @@ import java.util.*;
 
 public class BOJ_13905 {
     static class Edge implements Comparable<Edge> {
-        int from;
-        int to;
-        int cost;
+        int from, to, cost;
 
         public Edge(int from, int to, int cost) {
             this.from = from;
@@ -22,51 +20,50 @@ public class BOJ_13905 {
             return (this.cost - o.cost) * -1;
         }
     }
+
     static int[] parents;
     static PriorityQueue<Edge> edges;
 
     public static void main(String[] args) throws IOException {
         // handle inputs
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer firstInput = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(firstInput.nextToken());
-        int m = Integer.parseInt(firstInput.nextToken());
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
 
         parents = new int[n + 1];
-        for(int i = 0; i <= n; i++) parents[i] = i;
         edges = new PriorityQueue<>();
 
-        StringTokenizer secondInput = new StringTokenizer(br.readLine());
-        int s = Integer.parseInt(secondInput.nextToken());
-        int e = Integer.parseInt(secondInput.nextToken());
+        st = new StringTokenizer(br.readLine());
+        int s = Integer.parseInt(st.nextToken());
+        int e = Integer.parseInt(st.nextToken());
 
         for(int i = 0; i < m; i++) {
-            char[] input = br.readLine().trim().replaceAll(" ", "").toCharArray();
-            edges.offer(new Edge(input[0] - '0', input[1] - '0', input[2] - '0'));
-        }
-        // handle input ended
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            int cost = Integer.parseInt(st.nextToken());
 
+            Edge edge = new Edge(from, to, cost);
+            edges.offer(edge);
+        }
+
+        // handle input ended
+        initiateParents(n);
         System.out.println(kruskal(s, e));
     }
 
     static int kruskal(int s, int e) {
         int cost = 0;
-        while(!edges.isEmpty()) {
+        while (!edges.isEmpty()) {
             Edge current = edges.poll();
-
             cost = current.cost;
-            int from = find(current.from);
-            int to = find(current.to);
-
-            if(from != to) {
-                union(from, to);
-            } else continue;
-
-            if(find(s) == find(e)) break;
+            union(find(current.from), find(current.to));
+            if (find(s) == find(e)) break;
         }
-
         if(parents[s] != parents[e]) cost = 0;
-
         return cost;
     }
 
@@ -76,10 +73,19 @@ public class BOJ_13905 {
     }
 
     static void union(int s, int e) {
-        if(s < e) {
-            parents[e] = s;
+        int sRoot = find(s);
+        int eRoot = find(e);
+
+        if(sRoot <= eRoot) {
+            parents[eRoot] = sRoot;
         } else {
-            parents[s] = e;
+            parents[sRoot] = eRoot;
+        }
+    }
+
+    static void initiateParents(int n) {
+        for (int i = 0; i <= n; i++) {
+            parents[i] = i;
         }
     }
 }
