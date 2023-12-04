@@ -4,15 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class BOJ_18290 {
     static int[][] board;
+    static boolean[][] picked;
     static int k, n, m, max = 0;
-    static int[] dx = {-1, 1, -1, 1};
-    static int[] dy = {-1, -1, 1, 1};
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {-1, 1, 0, 0};
 
 
     public static void main(String[] args) throws IOException {
@@ -23,55 +22,48 @@ public class BOJ_18290 {
         m = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
 
-        board = new int[m][n];
-        for (int i = 0; i < m; i++) {
+        board = new int[n][m];
+        picked = new boolean[n][m];
+        for (int i = 0; i < n; i++) {
             board[i] = Arrays.stream(br.readLine().trim().split(" "))
                     .mapToInt(Integer::parseInt)
                     .toArray();
         }
 
-        for (int y = 0; y < m; y++) {
-            for (int x = 0; x < n; x++) {
-                max = Math.max(max, bfs(x, y, board[y][x], 1));
-            }
-        }
-
-        System.out.println(max);
+        System.out.println(solve(0, 0, 0, 0));
     }
 
-    static int bfs(int x, int y, int sum, int cnt) {
-        int max = 0;
-        boolean[][] visited = new boolean[n][m];
-        visited[y][x] = true;
+    static int solve(int x, int y, int cnt, int sum) {
+        if (cnt == k) {
+            return sum;
+        }
+        int max = Integer.MIN_VALUE;
 
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[]{x, y, sum, cnt});
+        for (int r = y; r < n; r++) {
+            for (int c = (r == y ? x : 0); c < m; c++) {
+                if (!picked[r][c] && isNoAdjacentPicked(c, r)) {
+                    picked[r][c] = true;
+                    int result = solve(c, r, cnt + 1, sum + board[r][c]);
+                    picked[r][c] = false;
 
-        while (!q.isEmpty()) {
-            int[] curr = q.poll();
-
-            // if the number is added k times then update max and skip this iteration
-            if (curr[3] == k) {
-                continue;
-            }
-
-            for (int i = 0; i < 4; i++) {
-                int nx = curr[0] + dx[i];
-                int ny = curr[1] + dy[i];
-
-                if (nx >= 0 && nx < n && ny >= 0 && ny < m && !visited[ny][nx]) {
-                    visited[ny][nx] = true;
-                    int next = board[ny][nx];
-                    if (board[ny][nx] > 0) {
-                        max = Math.max(max, curr[2] + next);
-                        q.offer(new int[] {nx, ny, curr[2] + next, curr[3] + 1});
-                    } else {
-                        q.offer(new int[] {nx, ny, curr[2], curr[3]});
-                    }
+                    max = Math.max(max, result);
                 }
             }
         }
 
         return max;
+    }
+
+    static boolean isNoAdjacentPicked(int x, int y) {
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
+                if (picked[ny][nx]) return false;
+            }
+        }
+
+        return true;
     }
 }
