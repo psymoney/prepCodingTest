@@ -3,8 +3,7 @@ class Solution:
         stack = []
         r = 0
         
-        for i in range(len(s)):
-            c = s[i]
+        for c in s:
             if c == '(':
                 stack.append(c)
             elif c == ')':
