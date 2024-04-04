@@ -14,8 +14,6 @@ class Solution:
                 stack.pop()
             elif c in ['+', '-', '*', '/']:
                 continue
-            else:
-                r = max(len(stack), r)
             
         
         return r if len(stack) == 0 else 0
