@@ -2,11 +2,12 @@ from collections import deque
 
 class Solution:
     def countStudents(self, students: List[int], sandwiches: List[int]) -> int:
+        # initiate and set array to count students' preference
         cnt = [0, 0]
-        
         for type in students:
             cnt[type] += 1
-            
+        
+        # use queue for better pop opertaion
         sand = deque(sandwiches)
         stud = deque(students)
         
