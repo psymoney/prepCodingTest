@@ -11,9 +11,6 @@ class Solution:
         stud = deque(students)
         
         while len(stud) and len(sand):
-            print(f'cnt = {cnt}')
-            print(f'sand = {sand}')
-            print(f'stud = {stud}')
             # case current student prefers current sandwich
             if stud[0] == sand[0]:
                 type = sand.popleft()
