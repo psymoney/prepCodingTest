@@ -1,10 +1,10 @@
 class Solution:
     def deckRevealedIncreasing(self, deck: List[int]) -> List[int]:
-        sd = sorted(deck)
+        deck.sort()
         usd = []
         
-        while len(sd):
-            c = sd.pop()
+        while len(deck):
+            c = deck.pop()
             if len(usd) < 2:
                 usd = [c] + usd
             else:
