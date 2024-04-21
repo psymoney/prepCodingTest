@@ -11,11 +11,7 @@ class Vertex:
         return self.value == other
 
 class Solution:
-    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
-        
-        def bfs():
-            pass
-        
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:     
         vertices = {}
         
         for e1, e2 in edges:
