@@ -15,6 +15,7 @@ class Solution:
         vertices = {}
         
         for e1, e2 in edges:
+            if (e1 == source and e2 == destination) or (e1 == destination and e2 == source): return True
             v1, v2 = vertices.get(e1), vertices.get(e2)
             
             if not v1:
