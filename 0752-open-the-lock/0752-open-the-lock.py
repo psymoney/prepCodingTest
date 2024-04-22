@@ -1,5 +1,6 @@
 class Solution:
     def openLock(self, deadends: List[str], target: str) -> int:
+        deadend = set(deadends)
         Q = deque([('0000', 0)])
         ans = 10 ** 4
         visited = {'0000': True}
