@@ -11,7 +11,4 @@ class Solution:
         :rtype: void Do not return anything, modify node in-place instead.
         """
         node.val = node.next.val
-        if node.next.next:
-            self.deleteNode(node.next)
-        else:
-            node.next = None
+        node.next = node.next.next
