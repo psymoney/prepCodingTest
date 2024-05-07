@@ -5,23 +5,27 @@
 #         self.next = next
 class Solution:
     def doubleIt(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        sys.set_int_max_str_digits(20_000)
-        temp = head
-        number = ''
+        prev = None
         
-        while head:
-            number += str(head.val)
+        if head.val <= 4:
+            prev = head
+            prev.val *= 2
+            head = head.next
+        else:
+            prev = ListNode(0)
+            prev.next = head
+        
+        temp = prev
+        if not head: return temp
+        while True:
+            v = head.val * 2
+            if v >= 10:
+                prev.val += 1
+            head.val = v % 10
+            if not head.next:
+                break
+            prev = head
             head = head.next
         
-        number = str(int(number) * 2)
-        head = temp
-
-        for i, v in enumerate(number):        
-            head.val = int(v)
-            if i != len(number) - 1 and not head.next:
-                print(i, v)
-                head.next = ListNode()
-            head = head.next
-                
         return temp
-        
+            
