@@ -86,3 +86,32 @@ fn _generate_graph(edges: Vec<(usize, usize)>) -> HashMap<usize, Vec<usize>> {
 
     graph
 }
+
+#[test]
+fn with_fisrt_example() {
+    let v: usize = 6;
+    let edges = vec![(1, 2), (2, 5), (5, 1), (3, 4), (4, 6)];
+    let graph = _generate_graph(edges);
+
+    assert_eq!(solve(v, graph), 2);
+}
+
+#[test]
+fn with_second_example() {
+    let v: usize = 6;
+    let edges = vec![(1, 2), (2, 5), (5, 1), (3, 4), (4, 6), (5, 4), (2, 4), (2, 3)];
+    let graph = _generate_graph(edges);
+
+    assert_eq!(solve(v, graph), 1);
+}
+
+#[test]
+fn with_third_example() {
+    let v: usize = 6;
+    let edges = vec![];
+    let graph = _generate_graph(edges);
+
+    println!("{:?}", graph);
+
+    assert_eq!(solve(v, graph), 6);
+}
