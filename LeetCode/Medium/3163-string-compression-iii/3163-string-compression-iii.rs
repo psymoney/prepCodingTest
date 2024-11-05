@@ -1,12 +1,23 @@
 impl Solution {
     pub fn compressed_string(word: String) -> String {
-        word.into_bytes()
-            .chunk_by(|a, b| a == b)
-            .flat_map(|chunk| {
-                chunk
-                    .chunks(9)
-                    .flat_map(|c| [Into::<char>::into(c.len() as u8 + b'0'), chunk[0].into()])
-            })
-            .collect()
+        let mut comp = String::new();
+
+        let mut prev = word.chars().nth(0).unwrap();
+        let mut cnt = 0;
+
+        for (i, ch) in word.char_indices() {
+            if ch == prev && cnt < 9 {
+                cnt += 1;
+            } else {
+                comp.push(char::from_digit(cnt as u32, 10).unwrap());
+                comp.push(prev);
+                cnt = 1;
+            }
+            prev = ch;
+        }
+        comp.push(char::from_digit(cnt as u32, 10).unwrap());
+        comp.push(prev);
+
+        comp
     }
 }
