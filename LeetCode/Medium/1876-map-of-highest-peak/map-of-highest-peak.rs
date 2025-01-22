@@ -4,7 +4,7 @@ impl Solution {
     pub fn highest_peak(is_water: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
         let rows = is_water.len();
         let cols = is_water[0].len();
-        let mut deq: VecDeque<(usize, usize)> = VecDeque::with_capacity(rows * cols);
+        let mut deq: VecDeque<(usize, usize)> = VecDeque::new();
         let mut distance: Vec<Vec<i32>> = vec![vec![-1; cols]; rows];
         let directions: [(i32, i32); 4] = [(0, 1), (0, -1), (-1, 0), (1, 0)];
 
