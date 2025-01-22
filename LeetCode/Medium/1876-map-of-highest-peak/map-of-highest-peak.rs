@@ -8,8 +8,8 @@ impl Solution {
         let mut distance: Vec<Vec<i32>> = vec![vec![-1; cols]; rows];
         let directions: [(i32, i32); 4] = [(0, 1), (0, -1), (-1, 0), (1, 0)];
 
-        for y in 0..rows {
-            for x in 0..cols {
+        for (y, row) in is_water.iter().enumerate() {
+            for (x, col) in row.iter().enumerate() {
                 if is_water[y][x] == 1 {
                     deq.push_back((x, y));
                     distance[y][x] = 0;
